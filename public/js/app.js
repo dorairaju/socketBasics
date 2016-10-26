@@ -1,4 +1,27 @@
+//***** it is from QueryParams.js *****//
+function getQueryVariable(variable) {
+	var query = window.location.search.substring(1);
+	var vars = query.split('&');
+	for( var i =0; i<vars.length; i++){
+		var pair = vars[i].split("=");
+		if (decodeURIComponent(pair[0]) == variable){
+			return decodeURIComponent(pair[1]);
+		}
+	}
+
+	return undefined;
+}
+
+//***** END *****//
+
 var socket = io();
+
+var name = getQueryVariable("name") || 'Anonymous';
+var room = getQueryVariable("room");
+
+var customText = name + " joined " + room;
+
+console.log(customText);
 
 socket.on('connect', function () {
 	console.log('Connected to socket.io server!');
@@ -10,7 +33,10 @@ socket.on('message', function (message) {
 
 	console.log("New message: " + message.text);
 
-	$('.messages').append('<p><strong>'+ momentTimestamp.local().format('h:mm a') +'</strong>:  '+message.text+'</p>');
+	var $message = $('.messages');
+
+	$message.append('<p><strong>' + message.name + ' ' + momentTimestamp.local().format('h:mm a') + '</strong></p>');
+	$message.append('<p>'+message.text+'</p>');
 });
 
 // Hadles submitting of new message
@@ -20,6 +46,7 @@ $form.on("submit",function(event){
 	event.preventDefault();
 
 	socket.emit('message',{
+		name: name,
 		text: $form.find('input[name=message]').val()
 	});
 
