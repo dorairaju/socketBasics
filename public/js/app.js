@@ -5,7 +5,7 @@ function getQueryVariable(variable) {
 	for( var i =0; i<vars.length; i++){
 		var pair = vars[i].split("=");
 		if (decodeURIComponent(pair[0]) == variable){
-			return decodeURIComponent(pair[1]);
+			return decodeURIComponent(pair[1].replace(/\+/g, ' '));
 		}
 	}
 
@@ -19,12 +19,20 @@ var socket = io();
 var name = getQueryVariable("name") || 'Anonymous';
 var room = getQueryVariable("room");
 
-var customText = name + " joined " + room;
+$(".room-title").html(room);
 
-console.log(customText);
+//var customText = name + " joined " + room;
+
+//console.log(customText);
 
 socket.on('connect', function () {
 	console.log('Connected to socket.io server!');
+
+	socket.emit('joinRoom', {
+		name: name,
+		room: room
+	});
+
 });
 
 //below code is to listen the code which is sent by the server to socket server
