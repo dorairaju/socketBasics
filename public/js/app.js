@@ -6,7 +6,9 @@ socket.on('connect', function () {
 
 //below code is to listen the code which is sent by the server to socket server
 socket.on('message', function (message) {
-	console.log("New message: " + message.text)
+	console.log("New message: " + message.text);
+
+	$('.messages').append('<p>'+message.text+'</p>');
 });
 
 // Hadles submitting of new message
