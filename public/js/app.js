@@ -6,10 +6,11 @@ socket.on('connect', function () {
 
 //below code is to listen the code which is sent by the server to socket server
 socket.on('message', function (message) {
-	//var momentTimestamp
+	var momentTimestamp = moment.utc(message.timestamp);
+
 	console.log("New message: " + message.text);
 
-	$('.messages').append('<p>'+message.text+'</p>');
+	$('.messages').append('<p><strong>'+ momentTimestamp.local().format('h:mm a') +'</strong>:  '+message.text+'</p>');
 });
 
 // Hadles submitting of new message
