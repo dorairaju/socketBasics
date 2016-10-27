@@ -41,10 +41,13 @@ socket.on('message', function (message) {
 
 	console.log("New message: " + message.text);
 
-	var $message = $('.messages');
+	var $messages = $('.messages');
+	var $message = $('<li class="list-group-item"></li>');
 
 	$message.append('<p><strong>' + message.name + ' ' + momentTimestamp.local().format('h:mm a') + '</strong></p>');
 	$message.append('<p>'+message.text+'</p>');
+
+	$messages.append($message);
 });
 
 // Hadles submitting of new message
